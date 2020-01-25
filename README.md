@@ -1,2 +1,2 @@
 # ggj2020
-Repository for Global Game Jam 2020
+Winning Repository for Global Game Jam 2020
