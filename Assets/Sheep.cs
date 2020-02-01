@@ -6,11 +6,18 @@ public class Sheep : MonoBehaviour
 {
     public float RandomMovementSpeed = 1.0f;
     public float RandomMovementChange = 1.0f;
+
+    public GameObject cloudTemplate;
+
     private float RandomMoveCounter = 0;
     private Vector3 _randomMotion = Vector3.zero;
     private Rigidbody _body = null;
     public void Die()
     {
+        // create a new object where sheep used to be
+        GameObject cloud = Instantiate(cloudTemplate);
+        cloud.transform.SetPositionAndRotation(transform.position, transform.rotation);
+
         Destroy(this.transform.root.gameObject);
     }
 
