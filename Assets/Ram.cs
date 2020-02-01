@@ -185,9 +185,16 @@ public class Ram : MonoBehaviour
         }
     }
 
+    private float _timeRamming = 0.0f;
+
     // Called every tick while the ram is ramming.
     void DoRam()
     {
+        _timeRamming += Time.deltaTime;
+        if (_timeRamming > 3.0f)
+        {
+            EnterCooldown();
+        }
         _body.velocity = -1.0f * _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
         if (_body.velocity.magnitude < 10.0f)
         {
@@ -244,6 +251,7 @@ public class Ram : MonoBehaviour
         {
             if (CurrentChargeUp > MinimumChargeForMotion)
             {
+                _timeRamming = 0.0f;
                 CurrentState = MoveState.Ramming;
             }
             else
