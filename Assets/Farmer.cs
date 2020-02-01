@@ -4,29 +4,74 @@ using UnityEngine;
 
 public class Farmer : MonoBehaviour
 {
-    private Camera _camera = null;
-    private Vector3 _velocity = new Vector3(0, 0, 0);
-    public float Friction = 0.9f;
-    public float Speed = 1.0f;
+    private Fence _fenceToRepair = null;
+    public float RepairRadius = 1.0f;
+    private Rigidbody _body = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        _camera = Camera.main;
+        _body = GetComponentInChildren<Rigidbody>();
+    }
+
+    void SearchFences()
+    {
+        Fence closestFence = null;
+        float closestDist = float.MaxValue;
+        foreach (var fence in Fence.Fences)
+        {
+            if (!fence.isActiveAndEnabled)
+            {
+                float dist = (fence.transform.position - transform.position).sqrMagnitude;
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestFence = fence;
+                }
+            }
+        }
+        _fenceToRepair = closestFence;
+    }
+
+
+    public float Kp = 0.1f;
+    public float RepairSpeed = 1.5f;
+    private float _repairCounter = 0.0f;
+
+    void RepairFence()
+    {
+        _repairCounter += Time.deltaTime;
+        if (_repairCounter > RepairSpeed)
+        {
+            _fenceToRepair.gameObject.SetActive(true);
+        }
+    }
+
+    void GoToFence()
+    {
+        var delta = (_fenceToRepair.transform.position - transform.position);
+        if (delta.magnitude < RepairRadius)
+        {
+            RepairFence();
+        }
+        else
+        {
+            _body.AddForce(delta * Kp);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 fwd =  _camera.transform.forward;
-        fwd.y = 0.0f;
-        fwd.Normalize();
-        Vector3 right =_camera.transform.right;
-        right.y = 0.0f;
-        right.Normalize();
-        
-        _velocity = (fwd * Input.GetAxis("Vertical1") + right * Input.GetAxis("Horizontal1")) * Speed;
-        transform.position += _velocity * Time.deltaTime;
-        _velocity *= Friction;
+        if (_fenceToRepair == null || _fenceToRepair.isActiveAndEnabled)
+        {
+            SearchFences();
+            _repairCounter = 0.0f;
+        }
+
+        if (_fenceToRepair != null)
+        {
+            GoToFence();
+        }
     }
 }
