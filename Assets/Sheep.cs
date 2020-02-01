@@ -9,7 +9,6 @@ public class Sheep : MonoBehaviour
     public float RandomMovementChange = 1.0f;
 
     public GameObject cloudTemplate;
-    private Rigidbody _cloudBody = null;
 
     private float RandomMoveCounter = 0;
     private Vector3 _randomMotion = Vector3.zero;
