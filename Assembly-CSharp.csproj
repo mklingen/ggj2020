@@ -57,6 +57,7 @@
   <ItemGroup>
      <Compile Include="Assets\Billboard.cs" />
      <Compile Include="Assets\Farmer.cs" />
+     <Compile Include="Assets\Fence.cs" />
      <Compile Include="Assets\MainStage.cs" />
      <Compile Include="Assets\Ram.cs" />
      <Compile Include="Assets\Sheep.cs" />

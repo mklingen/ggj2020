@@ -157,6 +157,7 @@ public class Ram : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         bool isSheep = collision.collider.gameObject.layer == LayerMask.NameToLayer("Sheep");
+        bool isFence = collision.collider.gameObject.layer == LayerMask.NameToLayer("Fence");
 
         // While walking and hitting a sheep, reduce our own velocity by a bit so that the player can't just push sheep around.
         if (CurrentState == MoveState.Walking && isSheep)
@@ -165,6 +166,14 @@ public class Ram : MonoBehaviour
         }
         if (CurrentState == MoveState.Ramming)
         {
+
+            if (isFence)
+            {
+                var fence = collision.collider.gameObject.GetComponentInChildren<Fence>();
+                fence.Die();
+                _body.velocity *= 0.0f;
+            }
+
             // Give collisions with sheep extra oomph.
             if (isSheep)
             {
