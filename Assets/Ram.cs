@@ -170,8 +170,11 @@ public class Ram : MonoBehaviour
             if (isFence)
             {
                 var fence = collision.collider.gameObject.GetComponentInChildren<Fence>();
-                fence.Die();
-                _body.velocity *= 0.0f;
+                if (fence != null)
+                {
+                    fence.Die();
+                    //_body.velocity *= 0.0f;
+                }
             }
 
             // Give collisions with sheep extra oomph.

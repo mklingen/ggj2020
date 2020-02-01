@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Sheep : MonoBehaviour
 {
+    public static List<Sheep> Sheeps = new List<Sheep>();
     public float RandomMovementSpeed = 1.0f;
     public float RandomMovementChange = 1.0f;
 
@@ -27,6 +28,7 @@ public class Sheep : MonoBehaviour
     void Start()
     {
         _body = GetComponentInChildren<Rigidbody>();
+        Sheeps.Add(this);
     }
 
     // Update is called once per frame
