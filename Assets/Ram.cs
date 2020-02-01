@@ -149,11 +149,42 @@ public class Ram : MonoBehaviour
             IsTouchingSheep = true;
             collision.collider.GetComponentInChildren<Rigidbody>().velocity *= ResistSheepMotion;
         }
+
+        if (CurrentState == MoveState.Ramming)
+        {
+            RamThing(collision);
+            EnterCooldown();
+        }
     }
 
     private void OnCollisionExit(Collision collision)
     {
         IsTouchingSheep = false;
+    }
+
+    private void RamThing(Collision collision)
+    {
+        bool isSheep = collision.collider.gameObject.layer == LayerMask.NameToLayer("Sheep");
+        bool isFence = collision.collider.gameObject.layer == LayerMask.NameToLayer("Fence");
+
+        if (isFence)
+        {
+            var fence = collision.collider.gameObject.GetComponentInChildren<Fence>();
+            if (fence != null)
+            {
+                fence.Die();
+                //_body.velocity *= 0.0f;
+            }
+        }
+
+        // Give collisions with sheep extra oomph.
+        if (isSheep)
+        {
+            _body.velocity *= SheepHitEnergyLoss;
+            collision.collider.GetComponentInChildren<Rigidbody>().velocity += _body.velocity * SheepHitForce;
+        }
+        // TODO: do different things depending on what we hit!
+        EnterCooldown();
     }
 
     // Called when the ram hits something.
@@ -169,25 +200,7 @@ public class Ram : MonoBehaviour
         }
         if (CurrentState == MoveState.Ramming)
         {
-
-            if (isFence)
-            {
-                var fence = collision.collider.gameObject.GetComponentInChildren<Fence>();
-                if (fence != null)
-                {
-                    fence.Die();
-                    //_body.velocity *= 0.0f;
-                }
-            }
-
-            // Give collisions with sheep extra oomph.
-            if (isSheep)
-            {
-                _body.velocity *= SheepHitEnergyLoss;
-                collision.collider.GetComponentInChildren<Rigidbody>().velocity += _body.velocity * SheepHitForce;
-            }
-            // TODO: do different things depending on what we hit!
-            EnterCooldown();
+            RamThing(collision);
         }
     }
 
@@ -362,7 +375,7 @@ public class Ram : MonoBehaviour
             _sprite.flipX = dotRight < 0;
         }
 
-        _animator.speed = _body.velocity.magnitude / 10.0f;
+        _animator.speed = Mathf.Max(_body.velocity.magnitude / 10.0f, 0.1f);
 
         // Draw some debug data (only shown when gizmos are enabled).
         Debug.DrawLine(transform.position, transform.position + _body.velocity, Color.red);
