@@ -64,6 +64,9 @@ public class Ram : MonoBehaviour
     // Last bounce height for smooting.
     private float _lastYOffset = 0.0f;
 
+    // Arrow to draw indicating where we will go.
+    public GameObject RamIndicator = null;
+
     // Ram can be in one of these states.
     public enum MoveState
     {
@@ -176,7 +179,7 @@ public class Ram : MonoBehaviour
     // Called every tick while the ram is ramming.
     void DoRam()
     {
-        _body.velocity = _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
+        _body.velocity = -1.0f * _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
         _sprite.color = new Color(1.0f, 0.0f, 0.0f);
     }
 
@@ -194,6 +197,8 @@ public class Ram : MonoBehaviour
         if (_currentCooldown >= CooldownTime)
         {
             CurrentState = MoveState.Walking;
+            _lastDirectionNormalized = Vector3.zero;
+            _lastDirection = Vector3.zero;
         }
 
         _currentCooldown += Time.deltaTime;
@@ -205,16 +210,16 @@ public class Ram : MonoBehaviour
     // Called every tick while the ram is charging up its ram.
     void DoChargeup()
     {
+        RamIndicator.SetActive(true);
         _body.velocity *= Friction;
         CurrentChargeUp += Time.deltaTime * ChargeUpRatePerSecond;
         CurrentChargeUp = Mathf.Min(CurrentChargeUp, MaximumChargeup);
 
-        if (CurrentChargeUp < 0.25)
-        {
-            // Give the player some ability to control the direction the ram will go,
-            // but only momentarily.
-            _directionOnRam = _lastDirectionNormalized;
-        }
+        // Give the player some ability to control the direction the ram will go.
+        _directionOnRam = _lastDirectionNormalized;
+
+        RamIndicator.transform.position = transform.position - _directionOnRam;
+        RamIndicator.transform.rotation = Quaternion.Euler(0, -Mathf.Rad2Deg * Mathf.Atan2(_directionOnRam.z, _directionOnRam.x), 0);
 
         _sprite.color = new Color(CurrentChargeUp, (1.0f - CurrentChargeUp), (1.0f - CurrentChargeUp));
 
@@ -273,6 +278,7 @@ public class Ram : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RamIndicator.SetActive(false);
         // Get the direction of the input sticks and multiply it by our basis vectors.
         _lastDirection = _fwd * Input.GetAxis(VerticalAxis) + _right * Input.GetAxis(HorizontalAxis);
         if (_lastDirection.magnitude > MovementDeadband)
