@@ -25,7 +25,7 @@ public class Farmer : MonoBehaviour
         right.y = 0.0f;
         right.Normalize();
         
-        _velocity += (fwd * Input.GetAxis("Vertical") + right * Input.GetAxis("Horizontal")) * Speed;
+        _velocity = (fwd * Input.GetAxis("Vertical1") + right * Input.GetAxis("Horizontal1")) * Speed;
         transform.position += _velocity * Time.deltaTime;
         _velocity *= Friction;
     }
