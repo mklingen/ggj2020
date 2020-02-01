@@ -344,7 +344,25 @@ public class Ram : MonoBehaviour
         Bounce();
 
         var dotRight = Vector3.Dot(_right, _lastDirectionNormalized);
-        _sprite.flipX = dotRight < 0;
+        var dotFwd = Vector3.Dot(_fwd, _lastDirectionNormalized);
+
+        if (CurrentState == MoveState.CharingRam)
+        {
+            dotRight = -dotRight;
+            dotFwd = -dotFwd;
+        }
+
+        _animator.SetInteger("Direction", dotFwd < 0 ? 0 : 1);
+       if (dotFwd > 0)
+        {
+            _sprite.flipX = dotRight > 0;
+        }
+       else
+        {
+            _sprite.flipX = dotRight < 0;
+        }
+
+        _animator.speed = _body.velocity.magnitude / 10.0f;
 
         // Draw some debug data (only shown when gizmos are enabled).
         Debug.DrawLine(transform.position, transform.position + _body.velocity, Color.red);
