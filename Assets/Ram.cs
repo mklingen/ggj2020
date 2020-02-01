@@ -7,8 +7,6 @@ public class Ram : MonoBehaviour
     // Keep track of the camera so we know which direction is forward and right.
     private Camera _camera = null;
 
-    // Current velocity in units per second.
-    private Vector3 _velocity = new Vector3(0, 0, 0);
     // Amount velocity reduces by when player isn't holding down the stick.
     public float Friction = 0.9f;
     // The maximum speed of the character.
@@ -79,12 +77,27 @@ public class Ram : MonoBehaviour
         Cooldown
     }
 
+    // Keep track of the RigidBody so we can work with physics.
+    private Rigidbody _body = null;
+
     // Current state of the ram.
     public MoveState CurrentState = MoveState.Walking;
+
+    // Multiplier on velocity to give to the sheep to send it flying.
+    public float SheepHitForce = 2.5f;
+
+    // Multiplier on our velocity to stop ourselves when we hit a sheep.
+    public float SheepHitEnergyLoss = 0.25f;
+
+    // Mulitiplier on our own velocity to prevent us from just shoving sheep like normal.
+    public float ResistSheepMotion = 0.1f;
+
+    public bool IsTouchingSheep = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        _body = GetComponentInChildren<Rigidbody>();
         _sprite = GetComponentInChildren<SpriteRenderer>();
         _camera = Camera.main;
         _fwd = _camera.transform.forward;
@@ -108,9 +121,10 @@ public class Ram : MonoBehaviour
     {
         if (_lastDirection.magnitude > MovementDeadband)
         {
-            _velocity = (_lastDirectionNormalized) * Speed;
+            float multiplier = IsTouchingSheep ? ResistSheepMotion : 1.0f;
+            _body.velocity = (_lastDirection) * Speed * multiplier;
         }
-        _velocity *= Friction;
+        _body.velocity *= Friction;
 
         if (Input.GetButton(ChargeUpButton))
         {
@@ -119,11 +133,41 @@ public class Ram : MonoBehaviour
         _sprite.color = Color.white;
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        bool isSheep = collision.collider.gameObject.layer == LayerMask.NameToLayer("Sheep");
+
+        // While walking and hitting a sheep, reduce our own velocity by a bit so that the player can't just push sheep around.
+        if (CurrentState == MoveState.Walking && isSheep)
+        {
+            IsTouchingSheep = true;
+            collision.collider.GetComponentInChildren<Rigidbody>().velocity *= ResistSheepMotion;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        IsTouchingSheep = false;
+    }
+
     // Called when the ram hits something.
     private void OnCollisionEnter(Collision collision)
     {
+        bool isSheep = collision.collider.gameObject.layer == LayerMask.NameToLayer("Sheep");
+
+        // While walking and hitting a sheep, reduce our own velocity by a bit so that the player can't just push sheep around.
+        if (CurrentState == MoveState.Walking && isSheep)
+        {
+            IsTouchingSheep = true;
+        }
         if (CurrentState == MoveState.Ramming)
         {
+            // Give collisions with sheep extra oomph.
+            if (isSheep)
+            {
+                _body.velocity *= SheepHitEnergyLoss;
+                collision.collider.GetComponentInChildren<Rigidbody>().velocity += _body.velocity * SheepHitForce;
+            }
             // TODO: do different things depending on what we hit!
             EnterCooldown();
         }
@@ -132,7 +176,7 @@ public class Ram : MonoBehaviour
     // Called every tick while the ram is ramming.
     void DoRam()
     {
-        _velocity = _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
+        _body.velocity = _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
         _sprite.color = new Color(1.0f, 0.0f, 0.0f);
     }
 
@@ -142,7 +186,6 @@ public class Ram : MonoBehaviour
         CurrentState = MoveState.Cooldown;
         CurrentChargeUp = 0.0f;
         _currentCooldown = 0.0f;
-        _velocity *= 0.0f;
     }
 
     // Called every tick while the ram is cooling down.
@@ -156,12 +199,13 @@ public class Ram : MonoBehaviour
         _currentCooldown += Time.deltaTime;
 
         _sprite.color = new Color(0.5f, 0.5f, 1.0f);
+        _body.velocity *= Friction;
     }
 
     // Called every tick while the ram is charging up its ram.
     void DoChargeup()
     {
-        _velocity *= Friction;
+        _body.velocity *= Friction;
         CurrentChargeUp += Time.deltaTime * ChargeUpRatePerSecond;
         CurrentChargeUp = Mathf.Min(CurrentChargeUp, MaximumChargeup);
 
@@ -261,11 +305,10 @@ public class Ram : MonoBehaviour
                     break;
                 }
         }
-        transform.position += _velocity * Time.deltaTime;
         Bounce();
 
         // Draw some debug data (only shown when gizmos are enabled).
-        Debug.DrawLine(transform.position, transform.position + _velocity, Color.red);
+        Debug.DrawLine(transform.position, transform.position + _body.velocity, Color.red);
         Debug.DrawLine(transform.position, transform.position + _lastDirectionNormalized, Color.yellow);
         Debug.DrawLine(transform.position, transform.position + _lastDirection, Color.cyan);
     }
