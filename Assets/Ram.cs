@@ -97,11 +97,14 @@ public class Ram : MonoBehaviour
 
     public bool IsTouchingSheep = false;
 
+    private Animator _animator = null;
+
     // Start is called before the first frame update
     void Start()
     {
+        _animator = GetComponentInChildren<Animator>();
         _body = GetComponentInChildren<Rigidbody>();
-        _sprite = GetComponentInChildren<SpriteRenderer>();
+        _sprite = GetComponentsInChildren<SpriteRenderer>()[1];
         _camera = Camera.main;
         _fwd = _camera.transform.forward;
         _fwd.y = 0.0f;
@@ -339,6 +342,9 @@ public class Ram : MonoBehaviour
                 }
         }
         Bounce();
+
+        var dotRight = Vector3.Dot(_right, _lastDirectionNormalized);
+        _sprite.flipX = dotRight < 0;
 
         // Draw some debug data (only shown when gizmos are enabled).
         Debug.DrawLine(transform.position, transform.position + _body.velocity, Color.red);
