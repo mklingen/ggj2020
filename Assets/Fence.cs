@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Fence : MonoBehaviour
 {
+    public static List<Fence> Fences = new List<Fence>();
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Fences.Add(this);    
     }
 
     public void Die()
     {
-        Destroy(this.transform.root.gameObject);
+        this.transform.root.gameObject.SetActive(false);
     }
 
     // Update is called once per frame

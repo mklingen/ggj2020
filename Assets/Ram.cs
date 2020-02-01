@@ -189,6 +189,10 @@ public class Ram : MonoBehaviour
     void DoRam()
     {
         _body.velocity = -1.0f * _directionOnRam * (1.0f + CurrentChargeUp) * RammingSpeed;
+        if (_body.velocity.magnitude < 10.0f)
+        {
+            EnterCooldown();
+        }
         _sprite.color = new Color(1.0f, 0.0f, 0.0f);
     }
 
@@ -225,7 +229,10 @@ public class Ram : MonoBehaviour
         CurrentChargeUp = Mathf.Min(CurrentChargeUp, MaximumChargeup);
 
         // Give the player some ability to control the direction the ram will go.
-        _directionOnRam = _lastDirectionNormalized;
+        if (_lastDirectionNormalized.magnitude > 0.5f)
+        {
+            _directionOnRam = _lastDirectionNormalized;
+        }
 
         RamIndicator.transform.position = transform.position - _directionOnRam;
         RamIndicator.transform.rotation = Quaternion.Euler(0, -Mathf.Rad2Deg * Mathf.Atan2(_directionOnRam.z, _directionOnRam.x), 0);
