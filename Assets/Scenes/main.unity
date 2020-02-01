@@ -783,7 +783,7 @@ MonoBehaviour:
   CooldownTime: 1
   CurrentChargeUp: 0
   ChargeUpRatePerSecond: 1
-  MinimumChargeForMotion: 1
+  MinimumChargeForMotion: 0
   MaximumChargeup: 2
   RammingSpeed: 10
   VerticalAxis: Vertical0
@@ -795,6 +795,7 @@ MonoBehaviour:
   BounceRateWhileWalking: 4
   BounceRateWhileCharging: 8
   BounceRateWhileRamming: 3
+  MovementDeadband: 0.01
   CurrentState: 0
 --- !u!65 &1360081158
 BoxCollider:
