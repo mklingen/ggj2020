@@ -115,7 +115,6 @@ public class Farmer : MonoBehaviour
         _sprite.flipX = dotRight > 0 ? true : false;
 
         _animator.speed = _body.velocity.magnitude / 0.5f;
-        
-
+       
     }
 }
