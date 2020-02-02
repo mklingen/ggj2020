@@ -62,6 +62,7 @@
      <Compile Include="Assets\MainMenu.cs" />
      <Compile Include="Assets\MainStage.cs" />
      <Compile Include="Assets\Ram.cs" />
+     <Compile Include="Assets\Shadow.cs" />
      <Compile Include="Assets\Sheep.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/matth/ggj2020/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
