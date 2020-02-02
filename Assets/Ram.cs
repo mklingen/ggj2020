@@ -101,6 +101,14 @@ public class Ram : MonoBehaviour
 
     private Animator _animator = null;
 
+    private AudioSource ramAudio;
+    public AudioClip launchSound;
+    public AudioClip chargeSound;
+    void Awake()
+    {
+        ramAudio = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -122,6 +130,9 @@ public class Ram : MonoBehaviour
     {
         CurrentState = MoveState.CharingRam;
         CurrentChargeUp = 0.0f;
+
+        ramAudio.clip = chargeSound;
+        ramAudio.Play();
     }
 
     // Called every tick while walking.
@@ -277,6 +288,8 @@ public class Ram : MonoBehaviour
             {
                 _timeRamming = 0.0f;
                 CurrentState = MoveState.Ramming;
+                ramAudio.clip = launchSound;
+                ramAudio.Play();
             }
             else
             {
