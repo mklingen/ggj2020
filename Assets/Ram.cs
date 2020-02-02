@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ram : MonoBehaviour
 {
+    public ParticleSystem GrassParticles = null;
+
     // Keep track of the camera so we know which direction is forward and right.
     private Camera _camera = null;
 
@@ -142,7 +144,7 @@ public class Ram : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         bool isSheep = collision.collider.gameObject.layer == LayerMask.NameToLayer("Sheep");
-
+        bool isSideWall = collision.collider.gameObject.layer == LayerMask.NameToLayer("SideWall");
         // While walking and hitting a sheep, reduce our own velocity by a bit so that the player can't just push sheep around.
         if (CurrentState == MoveState.Walking && isSheep)
         {
@@ -153,7 +155,10 @@ public class Ram : MonoBehaviour
         if (CurrentState == MoveState.Ramming)
         {
             RamThing(collision);
-            EnterCooldown();
+            if (!isSideWall)
+            {
+                EnterCooldown();
+            }
         }
     }
 
@@ -182,9 +187,8 @@ public class Ram : MonoBehaviour
         {
             _body.velocity *= SheepHitEnergyLoss;
             collision.collider.GetComponentInChildren<Rigidbody>().velocity += _body.velocity * SheepHitForce;
+            collision.collider.GetComponent<Sheep>().Launch();
         }
-        // TODO: do different things depending on what we hit!
-        EnterCooldown();
     }
 
     // Called when the ram hits something.
@@ -201,6 +205,7 @@ public class Ram : MonoBehaviour
         if (CurrentState == MoveState.Ramming)
         {
             RamThing(collision);
+            EnterCooldown();
         }
     }
 
@@ -335,21 +340,25 @@ public class Ram : MonoBehaviour
         {
             case MoveState.Walking:
                 {
+                    GrassParticles.Stop();
                     DoWalk();
                     break;
                 }
             case MoveState.Ramming:
                 {
+                    GrassParticles.Play();
                     DoRam();
                     break;
                 }
             case MoveState.Cooldown:
                 {
+                    GrassParticles.Stop();
                     DoCooldown();
                     break;
                 }
             case MoveState.CharingRam:
                 {
+                    GrassParticles.Stop();
                     DoChargeup();
                     break;
                 }
@@ -359,7 +368,7 @@ public class Ram : MonoBehaviour
         var dotRight = Vector3.Dot(_right, _lastDirectionNormalized);
         var dotFwd = Vector3.Dot(_fwd, _lastDirectionNormalized);
 
-        if (CurrentState == MoveState.CharingRam)
+        if (CurrentState == MoveState.CharingRam || CurrentState == MoveState.Ramming)
         {
             dotRight = -dotRight;
             dotFwd = -dotFwd;
