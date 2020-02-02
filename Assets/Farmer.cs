@@ -137,6 +137,8 @@ public class Farmer : MonoBehaviour
             _body.useGravity = true;
             farmerAudio.PlayOneShot(fallSound);
             _isFalling = true;
+            // turn off position constraints
+            _body.constraints = RigidbodyConstraints.FreezeRotation;
         }
         if (transform.position.y < -10)
         {
@@ -144,6 +146,8 @@ public class Farmer : MonoBehaviour
             transform.position = _startPosition;
             _body.velocity = Vector3.zero;
             _body.useGravity = false;
+            // turn on y position freezing
+            _body.constraints |= RigidbodyConstraints.FreezePositionY;
             _isFalling = false;
         }
     }
