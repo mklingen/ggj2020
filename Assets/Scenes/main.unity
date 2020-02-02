@@ -935,6 +935,7 @@ GameObject:
   - component: {fileID: 519035305}
   - component: {fileID: 519035304}
   - component: {fileID: 519035306}
+  - component: {fileID: 519035307}
   m_Layer: 0
   m_Name: MainStage
   m_TagString: Untagged
@@ -980,6 +981,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a6913310156f234896b77e508399440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &519035307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519035303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e88f0a0c9476b4a4ab0c3dcb3c17a753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &566984484
@@ -4201,6 +4214,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6115086470501177535, guid: ba219152c1113f64d9e06defa94f4ad3,
+        type: 3}
+      propertyPath: VerticalAxis
+      value: Vertical
+      objectReference: {fileID: 0}
+    - target: {fileID: 6115086470501177535, guid: ba219152c1113f64d9e06defa94f4ad3,
+        type: 3}
+      propertyPath: HorizontalAxis
+      value: Horizontal
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6115086470501177532, guid: ba219152c1113f64d9e06defa94f4ad3, type: 3}

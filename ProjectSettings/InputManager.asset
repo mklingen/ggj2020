@@ -6,7 +6,7 @@ InputManager:
   serializedVersion: 2
   m_Axes:
   - serializedVersion: 3
-    m_Name: Horizontal0
+    m_Name: Horizontal
     descriptiveName: Horizontal axis for joystick 1.
     descriptiveNegativeName: 
     negativeButton: a
@@ -20,9 +20,9 @@ InputManager:
     invert: 0
     type: 2
     axis: 0
-    joyNum: 1
+    joyNum: 0
   - serializedVersion: 3
-    m_Name: Horizontal0
+    m_Name: Horizontal
     descriptiveName: Horizontal axis for joystick 1.
     descriptiveNegativeName: 
     negativeButton: a
@@ -36,7 +36,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 1
+    joyNum: 0
   - serializedVersion: 3
     m_Name: Horizontal1
     descriptiveName: Horizontal axis for joystick 2.
@@ -70,7 +70,7 @@ InputManager:
     axis: 0
     joyNum: 2
   - serializedVersion: 3
-    m_Name: Vertical0
+    m_Name: Vertical
     descriptiveName: Vertical axis for joystick 1.
     descriptiveNegativeName: 
     negativeButton: s
@@ -84,9 +84,9 @@ InputManager:
     invert: 1
     type: 2
     axis: 1
-    joyNum: 1
+    joyNum: 0
   - serializedVersion: 3
-    m_Name: Vertical0
+    m_Name: Vertical
     descriptiveName: Vertical axis for joystick 1.
     descriptiveNegativeName: 
     negativeButton: s
@@ -100,7 +100,23 @@ InputManager:
     invert: 0
     type: 0
     axis: 1
-    joyNum: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Vertical
+    descriptiveName: Vertical axis for joystick 1.
+    descriptiveNegativeName: 
+    negativeButton: s
+    positiveButton: w
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 4
+    dead: 0.01
+    sensitivity: 3
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 2
+    joyNum: 0
   - serializedVersion: 3
     m_Name: Vertical1
     descriptiveName: Vertical axis for joystick 2.

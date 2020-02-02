@@ -41,8 +41,8 @@ public class Ram : MonoBehaviour
     private Vector3 _directionOnRam = Vector3.right;
 
     // Axes and button names.
-    public string VerticalAxis = "Vertical0";
-    public string HorizontalAxis = "Horizontal0";
+    public string VerticalAxis = "Vertical";
+    public string HorizontalAxis = "Horizontal";
     public string ChargeUpButton = "Chargeup";
 
     // Keep track of the height at start so that we can make a procedural
