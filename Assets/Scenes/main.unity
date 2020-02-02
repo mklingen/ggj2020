@@ -739,6 +739,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Laser: {fileID: 338337438}
   RepairRadius: 1
+  Exclaimer: {fileID: 951268711}
   repairSound: {fileID: 8300000, guid: 0f16b8e015cfbd94c9ac0cb8839ae9b0, type: 3}
   angrySound: {fileID: 8300000, guid: 64e44d838eff99a448fa68bcf0483ed4, type: 3}
   Kp: 2
