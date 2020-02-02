@@ -7,11 +7,14 @@ public class Farmer : MonoBehaviour
     private Fence _fenceToRepair = null;
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
-
+    private Vector3 _right = Vector3.back;
     // Start is called before the first frame update
     void Start()
     {
+        _right = Camera.main.transform.right;
+        _sprite = GetComponentInChildren<SpriteRenderer>();
         _body = GetComponentInChildren<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     void SearchFences()
@@ -37,6 +40,8 @@ public class Farmer : MonoBehaviour
     public float Kp = 0.1f;
     public float RepairSpeed = 1.5f;
     private float _repairCounter = 0.0f;
+    private SpriteRenderer _sprite = null;
+    private Animator _animator = null;
 
     void RepairFence()
     {
@@ -74,5 +79,13 @@ public class Farmer : MonoBehaviour
         {
             GoToFence();
         }
+
+        float dotRight = Vector3.Dot(_body.velocity, _right);
+
+        _sprite.flipX = dotRight > 0 ? true : false;
+
+        _animator.speed = _body.velocity.magnitude / 0.5f;
+        
+
     }
 }
