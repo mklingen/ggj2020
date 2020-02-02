@@ -40,7 +40,7 @@ public class MainMenu : MonoBehaviour
         Fence.Fences.Clear();
         Sheep.Sheeps.Clear();
         var scene = SceneManager.GetActiveScene();
-       if (scene.name == "main" || scene.name == "controls" || scene.name == "credits")
+       if (scene.name == "main" || scene.name == "controls" || scene.name == "credits" || scene.name == "win")
         {
             SceneManager.LoadScene("menus");
         }

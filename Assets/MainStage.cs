@@ -26,7 +26,7 @@ public class MainStage : MonoBehaviour
     {
         Fence.Fences.Clear();
         Sheep.Sheeps.Clear();
-        SceneManager.LoadScene("menus");
+        SceneManager.LoadScene("win");
     }
 
     // Start is called before the first frame update
