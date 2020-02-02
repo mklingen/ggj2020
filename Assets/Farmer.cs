@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Farmer : MonoBehaviour
 {
+    public LineRenderer Laser = null;
     private Fence _fenceToRepair = null;
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
@@ -20,7 +21,10 @@ public class Farmer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _right = Camera.main.transform.right;
+        _sprite = GetComponentsInChildren<SpriteRenderer>()[1];
         _body = GetComponentInChildren<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     void SearchFences()
@@ -48,9 +52,17 @@ public class Farmer : MonoBehaviour
     public float Kp = 0.1f;
     public float RepairSpeed = 1.5f;
     private float _repairCounter = 0.0f;
+    private SpriteRenderer _sprite = null;
+    private Animator _animator = null;
 
     void RepairFence()
     {
+        if (_fenceToRepair != null)
+        {
+            Laser.enabled = true;
+            Laser.SetPosition(0, transform.position + Vector3.up * 0.5f);
+            Laser.SetPosition(1, _fenceToRepair.transform.position + Random.insideUnitSphere * 0.15f);
+        }
         _repairCounter += Time.deltaTime;
         if (_repairCounter > RepairSpeed)
         {
@@ -78,6 +90,7 @@ public class Farmer : MonoBehaviour
     {
         if (_fenceToRepair == null || _fenceToRepair.isActiveAndEnabled)
         {
+            Laser.enabled = false;
             SearchFences();
             _repairCounter = 0.0f;
         }
@@ -86,5 +99,12 @@ public class Farmer : MonoBehaviour
         {
             GoToFence();
         }
+
+        float dotRight = Vector3.Dot(_body.velocity, _right);
+        _sprite.flipX = dotRight > 0 ? true : false;
+
+        _animator.speed = _body.velocity.magnitude / 0.5f;
+        
+
     }
 }

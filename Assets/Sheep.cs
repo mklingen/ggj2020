@@ -15,6 +15,8 @@ public class Sheep : MonoBehaviour
     private Vector3 _randomMotion = Vector3.zero;
     private Rigidbody _body = null;
     private float _startY = 0.0f;
+    Vector3 _right = Vector3.zero;
+    private SpriteRenderer _sprite = null;
     public void Die()
     {
         // create a new object where sheep used to be
@@ -34,6 +36,8 @@ public class Sheep : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _sprite = GetComponentInChildren<SpriteRenderer>();
+        _right = Camera.main.transform.right;
         _startY = transform.position.y;
         _body = GetComponentInChildren<Rigidbody>();
         Sheeps.Add(this);
@@ -57,6 +61,9 @@ public class Sheep : MonoBehaviour
             float y = Mathf.Max(Mathf.Sin(Mathf.PI * (1.0f - LaunchTime)) + _startY, _startY);
             transform.position = new Vector3(transform.position.x, y, transform.position.z);
         }
+
+        float dotRight = Vector3.Dot(_body.velocity, _right);
+        _sprite.flipX = dotRight > 0 ? true : false;
 
     }
 }
