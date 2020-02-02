@@ -8,6 +8,7 @@ public class Farmer : MonoBehaviour
     private Fence _fenceToRepair = null;
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
+    private Vector3 _right;
 
     private AudioSource farmerAudio;
     public AudioClip repairSound;
