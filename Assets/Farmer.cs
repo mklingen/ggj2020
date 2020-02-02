@@ -9,6 +9,7 @@ public class Farmer : MonoBehaviour
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
     private Vector3 _right;
+    public GameObject Exclaimer = null;
 
     private AudioSource farmerAudio;
     public AudioClip repairSound;
@@ -22,6 +23,7 @@ public class Farmer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Exclaimer.SetActive(false);
         _right = Camera.main.transform.right;
         _sprite = GetComponentsInChildren<SpriteRenderer>()[1];
         _body = GetComponentInChildren<Rigidbody>();
@@ -41,10 +43,15 @@ public class Farmer : MonoBehaviour
                 {
                     closestDist = dist;
                     closestFence = fence;
-                    farmerAudio.clip = angrySound;
-                    farmerAudio.Play();
                 }
             }
+        }
+
+        if (closestFence != null)
+        {
+            farmerAudio.clip = angrySound;
+            farmerAudio.Play();
+            Exclaimer.SetActive(true);
         }
         _fenceToRepair = closestFence;
     }
@@ -78,10 +85,12 @@ public class Farmer : MonoBehaviour
         var delta = (_fenceToRepair.transform.position - transform.position);
         if (delta.magnitude < RepairRadius)
         {
+            Exclaimer.SetActive(false);
             RepairFence();
         }
         else
         {
+            Exclaimer.SetActive(Mathf.Sin(Time.time * 10.0f) > 0);
             _body.AddForce(delta * Kp);
         }
     }
