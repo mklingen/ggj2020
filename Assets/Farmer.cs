@@ -9,6 +9,7 @@ public class Farmer : MonoBehaviour
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
     private Vector3 _right;
+    public GameObject Exclaimer = null;
     private Vector3 _startPosition;
 
     private AudioSource farmerAudio;
@@ -25,6 +26,7 @@ public class Farmer : MonoBehaviour
     void Start()
     {
         _startPosition = transform.position;
+        Exclaimer.SetActive(false);
         _right = Camera.main.transform.right;
         _sprite = GetComponentsInChildren<SpriteRenderer>()[1];
         _body = GetComponentInChildren<Rigidbody>();
@@ -44,10 +46,15 @@ public class Farmer : MonoBehaviour
                 {
                     closestDist = dist;
                     closestFence = fence;
-                    farmerAudio.clip = angrySound;
-                    farmerAudio.Play();
                 }
             }
+        }
+
+        if (closestFence != null)
+        {
+            farmerAudio.clip = angrySound;
+            farmerAudio.Play();
+            Exclaimer.SetActive(true);
         }
         _fenceToRepair = closestFence;
     }
@@ -78,13 +85,16 @@ public class Farmer : MonoBehaviour
 
     void GoToFence()
     {
+        Laser.enabled = false;
         var delta = (_fenceToRepair.transform.position - transform.position);
         if (delta.magnitude < RepairRadius)
         {
+            Exclaimer.SetActive(false);
             RepairFence();
         }
         else
         {
+            Exclaimer.SetActive(Mathf.Sin(Time.time * 10.0f) > 0);
             _body.AddForce(delta * Kp);
         }
     }
@@ -116,8 +126,7 @@ public class Farmer : MonoBehaviour
         }
 
         _animator.speed = _body.velocity.magnitude / 0.5f;
-        
-
+       
     }
 
     private bool _isFalling = false;
