@@ -82,6 +82,7 @@ public class Farmer : MonoBehaviour
 
     void GoToFence()
     {
+        Laser.enabled = false;
         var delta = (_fenceToRepair.transform.position - transform.position);
         if (delta.magnitude < RepairRadius)
         {
