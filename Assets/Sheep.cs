@@ -28,6 +28,7 @@ public class Sheep : MonoBehaviour
     public void Launch()
     {
         LaunchTime = 1.0f;
+        GetComponent<AudioSource>().Play();
     }
 
     // Start is called before the first frame update
