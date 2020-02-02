@@ -44,6 +44,7 @@ public class Farmer : MonoBehaviour
         if (_repairCounter > RepairSpeed)
         {
             _fenceToRepair.gameObject.SetActive(true);
+            GetComponent<AudioSource>().Play();
         }
     }
 
