@@ -9,10 +9,12 @@ public class Farmer : MonoBehaviour
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
     private Vector3 _right;
+    private Vector3 _startPosition;
 
     private AudioSource farmerAudio;
     public AudioClip repairSound;
     public AudioClip angrySound;
+    public AudioClip fallSound;
     void Awake()
     {
         farmerAudio = GetComponent<AudioSource>();
@@ -22,6 +24,7 @@ public class Farmer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _startPosition = transform.position;
         _right = Camera.main.transform.right;
         _sprite = GetComponentsInChildren<SpriteRenderer>()[1];
         _body = GetComponentInChildren<Rigidbody>();
@@ -89,23 +92,50 @@ public class Farmer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_fenceToRepair == null || _fenceToRepair.isActiveAndEnabled)
+        if (Mathf.Abs(transform.position.x) < 5.1 &&
+            Mathf.Abs(transform.position.z) < 5.1)
         {
-            Laser.enabled = false;
-            SearchFences();
-            _repairCounter = 0.0f;
-        }
+            if (_fenceToRepair == null || _fenceToRepair.isActiveAndEnabled)
+            {
+                Laser.enabled = false;
+                SearchFences();
+                _repairCounter = 0.0f;
+            }
 
-        if (_fenceToRepair != null)
+            if (_fenceToRepair != null)
+            {
+                GoToFence();
+            }
+
+            float dotRight = Vector3.Dot(_body.velocity, _right);
+            _sprite.flipX = dotRight > 0 ? true : false;
+        }
+        else
         {
-            GoToFence();
+            Fall();
         }
-
-        float dotRight = Vector3.Dot(_body.velocity, _right);
-        _sprite.flipX = dotRight > 0 ? true : false;
 
         _animator.speed = _body.velocity.magnitude / 0.5f;
         
 
+    }
+
+    private bool _isFalling = false;
+    public void Fall()
+    {
+        if (!_isFalling) { 
+            // turn on gravity and play falling sound
+            _body.useGravity = true;
+            farmerAudio.PlayOneShot(fallSound);
+            _isFalling = true;
+        }
+        if (transform.position.y < -10)
+        {
+            // once he's fallen far enough, reset him
+            transform.position = _startPosition;
+            _body.velocity = Vector3.zero;
+            _body.useGravity = false;
+            _isFalling = false;
+        }
     }
 }

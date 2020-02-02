@@ -647,6 +647,7 @@ MonoBehaviour:
   RepairRadius: 1
   repairSound: {fileID: 8300000, guid: 0f16b8e015cfbd94c9ac0cb8839ae9b0, type: 3}
   angrySound: {fileID: 8300000, guid: 64e44d838eff99a448fa68bcf0483ed4, type: 3}
+  fallSound: {fileID: 8300000, guid: 0061b856214e5d14dbc5acc3a297f73a, type: 3}
   Kp: 2
   RepairSpeed: 2
 --- !u!65 &338337435
@@ -676,7 +677,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!82 &338337437
 AudioSource:
@@ -1294,7 +1295,7 @@ MeshRenderer:
   m_GameObject: {fileID: 613631579}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
