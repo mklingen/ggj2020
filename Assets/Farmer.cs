@@ -8,6 +8,15 @@ public class Farmer : MonoBehaviour
     public float RepairRadius = 1.0f;
     private Rigidbody _body = null;
 
+    private AudioSource farmerAudio;
+    public AudioClip repairSound;
+    public AudioClip angrySound;
+    void Awake()
+    {
+        farmerAudio = GetComponent<AudioSource>();
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +36,8 @@ public class Farmer : MonoBehaviour
                 {
                     closestDist = dist;
                     closestFence = fence;
+                    farmerAudio.clip = angrySound;
+                    farmerAudio.Play();
                 }
             }
         }
@@ -44,7 +55,8 @@ public class Farmer : MonoBehaviour
         if (_repairCounter > RepairSpeed)
         {
             _fenceToRepair.gameObject.SetActive(true);
-            GetComponent<AudioSource>().Play();
+            farmerAudio.clip = repairSound;
+            farmerAudio.Play();
         }
     }
 
