@@ -105,6 +105,7 @@ public class Ram : MonoBehaviour
     public AudioClip launchSound;
     public AudioClip chargeSound;
     public AudioClip walkSound;
+    public AudioClip fenceSound;
     void Awake()
     {
         ramAudio = GetComponent<AudioSource>();
@@ -201,6 +202,7 @@ public class Ram : MonoBehaviour
             var fence = collision.collider.gameObject.GetComponentInChildren<Fence>();
             if (fence != null)
             {
+                ramAudio.PlayOneShot(fenceSound);
                 fence.Die();
                 //_body.velocity *= 0.0f;
             }

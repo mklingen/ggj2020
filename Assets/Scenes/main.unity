@@ -4315,6 +4315,11 @@ PrefabInstance:
       propertyPath: walkSound
       value: 
       objectReference: {fileID: 8300000, guid: d2a83f5ac3cd3a641819ce98bd6ef5a2, type: 3}
+    - target: {fileID: 6115086470501177535, guid: ba219152c1113f64d9e06defa94f4ad3,
+        type: 3}
+      propertyPath: fenceSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 8e1ccefa9a1fa3743b2a4d26984d7d07, type: 3}
     - target: {fileID: 7426028528505810075, guid: ba219152c1113f64d9e06defa94f4ad3,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
