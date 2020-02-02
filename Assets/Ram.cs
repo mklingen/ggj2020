@@ -104,6 +104,7 @@ public class Ram : MonoBehaviour
     private AudioSource ramAudio;
     public AudioClip launchSound;
     public AudioClip chargeSound;
+    public AudioClip walkSound;
     void Awake()
     {
         ramAudio = GetComponent<AudioSource>();
@@ -131,8 +132,8 @@ public class Ram : MonoBehaviour
         CurrentState = MoveState.CharingRam;
         CurrentChargeUp = 0.0f;
 
-        ramAudio.clip = chargeSound;
-        ramAudio.Play();
+        //ramAudio.clip = chargeSound;
+        ramAudio.PlayOneShot(chargeSound);
     }
 
     // Called every tick while walking.
@@ -150,6 +151,18 @@ public class Ram : MonoBehaviour
             StartCharging();
         }
         _sprite.color = Color.white;
+
+        ramAudio.clip = walkSound;
+        if (_body.velocity.magnitude > 0.1f)
+        {
+            if (!ramAudio.isPlaying)
+            {
+                ramAudio.Play();
+            }
+        } else
+        {
+            ramAudio.Stop();
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -288,6 +301,7 @@ public class Ram : MonoBehaviour
             {
                 _timeRamming = 0.0f;
                 CurrentState = MoveState.Ramming;
+                ramAudio.Stop();  // stop the potentially long charging sound
                 ramAudio.clip = launchSound;
                 ramAudio.Play();
             }
